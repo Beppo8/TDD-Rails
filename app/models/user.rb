@@ -1,5 +1,6 @@
 class User < ApplicationRecord
     has_secure_password
+    belongs_to :store
     # Validations
     validates :email, :password_digest, :age, :type, presence: true
     validates :email, uniqueness: true
