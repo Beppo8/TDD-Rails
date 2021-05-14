@@ -16,5 +16,19 @@ RSpec.describe V1::UsersController, type: :controller do
                 it { is_expected.to include(:id, :email, :age) }
             end
         end
+        let(:bad_user) { { email: "test", password: "12345", age: 10 } }
+        context 'Usuario incorrecto' do
+            before do
+                post(:create, format: :json, params: { user: bad_user})
+            end
+            context 'Respuesta con status bad request' do
+                subject { response }
+                it { is_expected.to have_http_status(:bad_request) }
+            end
+            context 'Respuesta con errores de validacion' do
+                subject { payload_test }
+                it { is_expected.to include(:errors) }
+            end
+        end
     end
 end
