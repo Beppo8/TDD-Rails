@@ -1,2 +1,4 @@
 es:
   hello: "Hola mundo"
+  user:
+    bad_credentials: 'Credenciales incorrectas'

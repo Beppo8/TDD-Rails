@@ -2,7 +2,14 @@ require 'rails_helper'
 
 RSpec.describe V1::UsersController, type: :controller do
     describe 'Registro de usuarios' do
-        let(:user) { { email: Faker::Internet.email, age: rand(30...100), password: Faker::Internet.password(min_length: 10, max_length: 30) } }
+        let(:user) { { email: Faker::Internet.email, 
+                        age: rand(30...100),
+                        password: Faker::Internet.password(min_length: 10, max_length: 30),
+                        store_attributes:
+                        {
+                            name: Faker::Games::Zelda.game
+                        }
+                    } }
         context 'Usuario registrado correctamente' do
             before do
                 post(:create, format: :json, params: { user: user })
@@ -13,7 +20,11 @@ RSpec.describe V1::UsersController, type: :controller do
             end
             context 'Respuesta con valores de user' do
                 subject { payload_test }
-                it { is_expected.to include(:id, :email, :age) }
+                it { is_expected.to include(:id, :email, :age, :store) }
+            end
+            context 'Respuesta con valores correctos de store' do
+                subject { payload_test[:store] }
+                it { is_expected.to include(:id, :name, :created_at, :updated_at) }
             end
         end
         let(:bad_user) { { email: "test", password: "12345", age: 10 } }
